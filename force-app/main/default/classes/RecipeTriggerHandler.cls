@@ -22,8 +22,12 @@ public class RecipeTriggerHandler{
     //create method intended to rate the complexity of the recipe 
     //method will call method established in HelperFunctions class to evaluate
     public static void determineComplexity(List<Recipe__c> recipeList){
+        system.debug('Begin Complexity Evaluation');
         //loop through each recipe
         for(Recipe__c recipe : recipeList){
+            system.debug(recipe.Servings__c);
+            system.debug(recipe.Active_Time_Units__c);
+            system.debug(recipe.Active_Time__c);
             //establish an Integer variable, and assign the return value of the
             //rateRecipeComplexity method to it 
             //evaluate the value assigned to Rating
@@ -31,6 +35,7 @@ public class RecipeTriggerHandler{
             //if 2 set complexity as Moderate
             //if 1 set Complexity as Simple 
             Integer rating = HelperFunctions.rateRecipeComplexity(recipe);
+            system.debug(rating);
             if(rating == 3){
                 recipe.Complexity__c = 'Difficult';
             }
@@ -40,16 +45,17 @@ public class RecipeTriggerHandler{
             else if(rating == 1){
                 recipe.Complexity__c = 'Simple';
             }
+            system.debug(recipe.Complexity__c);
         }
         
     }
     //create method intended to create a task to review the cookbook for a recipe that is not a draft
-    public static void createReviewTask(List<Recipe__c> recipeList){
+    public static void createReviewTask(List<Recipe__c> recipeList, Map<Id, Recipe__c> oldRecipeMap){
         Set<ID> draftRecipes = new Set<ID>();
         for(Recipe__c recipe : recipeList){
             //loop through every recipe
             //determine if recipe is a draft - if not add it to the Set to store the Recipe IDS
-            if(!recipe.Draft__c){
+            if(!recipe.Draft__c && (oldRecipeMap.get(recipe.Id).Draft__c != recipe.Draft__c)){
                 draftRecipes.add(recipe.Id);
             }
         }
