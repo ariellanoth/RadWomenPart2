@@ -11,7 +11,8 @@ public class RecipeTriggerHandler{
             //if all fields are populated, set the field DRAFT to FALSE 
             if(recipe.Name == '' || recipe.Active_Time__c == NULL || recipe.Description__c == '' 
             || recipe.Active_Time_Units__c == '' || recipe.Servings__c == NULL){
-                recipe.Draft__c = TRUE; 
+                //recipe.Draft__c = TRUE; 
+                recipe.addError('you are missing a required field');
             }
             else{
                 recipe.Draft__c = FALSE; 
@@ -55,7 +56,7 @@ public class RecipeTriggerHandler{
         for(Recipe__c recipe : recipeList){
             //loop through every recipe
             //determine if recipe is a draft - if not add it to the Set to store the Recipe IDS
-            if(!recipe.Draft__c && (oldRecipeMap.get(recipe.Id).Draft__c != recipe.Draft__c)){
+            if(!recipe.Draft__c /*&& (oldRecipeMap.get(recipe.Id).Draft__c != recipe.Draft__c)*/){
                 draftRecipes.add(recipe.Id);
             }
         }
