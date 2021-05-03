@@ -63,4 +63,38 @@ public class TestFactory {
         insert u;
         return u;
     }
+    public static List<Ingredient__c> generateIngredients(Integer numOfIngredients){
+        List<Ingredient__c> testIngredients = new List<Ingredient__c>();
+        for(Integer count; count < nuMofIngredients; count++){
+            Ingredient__c newRec = new Ingredient__c();
+            newRec.Name = 'Test Ingredient' + count; 
+            testIngredients.add(newRec);
+
+        }
+        return testIngredients; 
+
+    }
+    public static List<Ingredient__c> insertIngredients(Integer numOfIngredients, List<Recipe__c> testRecipes){
+        List<Ingredient__c> testIngredients = generateIngredients(numOfIngredients);
+        for(Recipe__c testRecipeRecord : testRecipes){
+            for(Ingredient__c testIngredientRecord : testIngredients){
+                testIngredientRecord.Recipe__c = testRecipeRecord.Id;
+            }
+        }
+        insert testIngredients; 
+        return testIngredients; 
+    }
+    public static List<Recipe__c> insertRecipes(Integer numOfRecipes){
+        List<Recipe__c> testRecipes = new List<Recipe__c>();
+        for(Integer count; count < numOfRecipes; count++){
+            Recipe__c newRec = new Recipe__c();
+            newRec.Name = 'Test Recipe ' + count; 
+            newRec.Servings__c = count; 
+            testRecipes.add(newRec);
+
+        }
+        insert testRecipes;  
+        return testRecipes; 
+    }
+
 }
